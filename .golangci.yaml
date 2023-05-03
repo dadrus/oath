@@ -1,0 +1,77 @@
+# Options for analysis running.
+run:
+  modules-download-mode: readonly
+
+linters:
+  enable-all: true
+  disable:
+    - dupl
+    - wrapcheck
+    - ireturn
+    - exhaustruct
+    - exhaustivestruct
+    - interfacer
+    - testpackage
+    - paralleltest
+    - nolintlint
+    - tparallel
+    # deprecated
+    - varcheck
+    - deadcode
+    - nosnakecase
+    - structcheck
+    - maligned
+    - scopelint
+    - ifshort
+    - golint
+
+issues:
+  exclude-rules:
+    - path: '(.+)_test\.go'
+      linters:
+        - funlen
+
+linters-settings:
+  exhaustive:
+    ignore-enum-members: "POT.+"
+    default-signifies-exhaustive: true
+  tagliatelle:
+    # Check the struck tag name case.
+    case:
+      rules:
+        # Support string case: `camel`, `pascal`, `kebab`, `snake`, `goCamel`, `goPascal`, `goKebab`, `goSnake`, `upper`, `lower`
+        json: snake
+        yaml: snake
+  gci:
+    no-inline-comments: true
+    no-prefix-comments: true
+    sections:
+      - standard # Captures all standard packages if they do not match another section.
+      - default # Contains all imports that could not be matched to another section type.
+      - prefix(github.com/dadrus/otp-service) # Groups all imports with the specified Prefix.
+  varnamelen:
+    min-name-length: 2
+    ignore-type-assert-ok: true
+    ignore-map-index-ok: true
+    ignore-chan-recv-ok: true
+    ignore-names:
+      - err
+    ignore-decls:
+      - c *fiber.Ctx
+      - t testing.T
+      - i int
+      - T any
+      - m map[string]int
+      - w http.ResponseWriter
+      - r *http.Request
+  goconst:
+    ignore-tests: true
+  cyclop:
+    max-complexity: 11
+  funlen:
+    lines: 80
+  gomoddirectives:
+    replace-allow-list:
+      # to avoid having a CVE in the used version
+      - golang.org/x/net
+      - golang.org/x/text
