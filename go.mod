@@ -5,7 +5,7 @@ go 1.20
 require (
 	github.com/stephennancekivell/go-future v0.0.0-20220519100038-8611b539078e
 	github.com/stretchr/testify v1.8.2
-	golang.org/x/exp v0.0.0-20230321023759-10a507213a29
+	golang.org/x/exp v0.0.0-20230425010034-47ecfdc1ba53
 )
 
 require (
