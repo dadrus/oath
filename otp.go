@@ -23,6 +23,10 @@ func (t OTPType) New(cipher cipher.AEAD, opts ...Option) (string, error) {
 		opt(data)
 	}
 
+	if data.InitialSkew < data.WorkSkew {
+		data.InitialSkew = data.WorkSkew
+	}
+
 	if len(data.Key) == 0 {
 		key := make([]byte, data.HashAlgorithm.Size())
 		rand.Read(key)

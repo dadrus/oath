@@ -55,8 +55,14 @@ func WithKey(key []byte) Option {
 	}
 }
 
-func WithSkew(skew int) Option {
+func WithWorkSkew(skew int) Option {
 	return func(o *config) {
-		o.Skew = skew
+		o.WorkSkew = skew
+	}
+}
+
+func WithInitialSkew(skew int) Option {
+	return func(o *config) {
+		o.InitialSkew = skew
 	}
 }

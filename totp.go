@@ -22,17 +22,18 @@ func (b *totpBlob) OTPURI(account, issuer string) string {
 
 func (b *totpBlob) Verify(value string) error {
 	alg := b.algorithm()
+	skew := b.c.Skew()
 
-	deviation, err := alg.Validate(value, time.Now().Unix()+b.c.Deviation, totp.WithSkew(b.c.Skew))
+	deviation, err := alg.Validate(value, time.Now().Unix()+b.c.Deviation, totp.WithSkew(skew))
 	if err != nil {
 		return err
 	}
 
 	if !slices.Contains(b.c.LastVerified, value) {
-		b.c.Deviation = deviation
+		b.c.Deviation += deviation
 		b.c.Synchronized = true
 
-		if len(b.c.LastVerified) >= b.c.Skew*2+1 {
+		if len(b.c.LastVerified) >= skew*2+1 {
 			b.c.LastVerified = b.c.LastVerified[1:]
 		}
 

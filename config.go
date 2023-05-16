@@ -25,8 +25,17 @@ type config struct {
 	T0            int64             `json:"t0,omitempty"`
 	Deviation     int64             `json:"deviation,omitempty"`
 	Synchronized  bool              `json:"synchronized,omitempty"`
-	Skew          int               `json:"skew,omitempty"`
+	WorkSkew      int               `json:"skew,omitempty"`
+	InitialSkew   int               `json:"initial_skew,omitempty"`
 	LastVerified  []string          `json:"last_verified,omitempty"`
+}
+
+func (b *config) Skew() int {
+	if b.Synchronized {
+		return b.WorkSkew
+	}
+
+	return b.InitialSkew
 }
 
 func (b *config) unmarshal(value string, c cipher.AEAD) error {
