@@ -21,15 +21,14 @@ func (b *hotpBlob) OTPURI(account, issuer string) string {
 func (b *hotpBlob) Verify(value string) error {
 	alg := b.algorithm()
 
-	deviation, err := alg.Validate(value, b.c.Counter+b.c.Deviation, hotp.WithSkew(b.c.Skew))
+	deviation, err := alg.Validate(value, b.c.Counter, hotp.WithSkew(b.c.Skew))
 	if err != nil {
 		return err
 	}
 
 	if !slices.Contains(b.c.LastVerified, value) {
-		b.c.Deviation = deviation
 		b.c.Synchronized = true
-		b.c.Counter++
+		b.c.Counter = b.c.Counter + deviation + 1
 
 		if len(b.c.LastVerified) >= b.c.Skew {
 			b.c.LastVerified = b.c.LastVerified[1:]
