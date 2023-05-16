@@ -68,7 +68,7 @@ func NewEncoder(alg otp.Algorithm, accountName string, opts ...EncoderOption) *E
 
 func (e *Encoder) Encode() string {
 	params := parameter{
-		"secret":    []string{base32.StdEncoding.EncodeToString(e.exp.key)},
+		"secret":    []string{strings.TrimRight(base32.StdEncoding.EncodeToString(e.exp.key), "=")},
 		"algorithm": []string{strings.ToUpper(e.exp.hashAlgorithm)},
 		"digits":    []string{e.exp.digits.String()},
 	}
