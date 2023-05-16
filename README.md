@@ -76,14 +76,14 @@ This section is not about the All Inclusive stuff. That will come later. This se
 import (
 	"image/png"
 	
-    "github.com/boombuler/barcode"
-    "github.com/boombuler/barcode/qr"
-
-    "github.com/dadrus/oath/otpauth"
+	"github.com/boombuler/barcode"
+	"github.com/boombuler/barcode/qr"
+	
+	"github.com/dadrus/oath/otpauth"
 )
 
 func main() {
-    // get the algorithm instance from somewhere (see e.g. the previous example)
+	// get the algorithm instance from somewhere (see e.g. the previous example)
 	alg := ...
 	
 	// encode the settings of the algorithm, plus the name of the account, the algorithm
@@ -93,9 +93,9 @@ func main() {
 	// encode it now as QR Code and stream somewhere
 	// E.g.
 	b, _ := qr.Encode(otpURI, qr.M, qr.Auto)
-    b, _ = barcode.Scale(b, 200, 200)
-
-    png.Encode(writer, b)
+	b, _ = barcode.Scale(b, 200, 200)
+	
+	png.Encode(writer, b)
 }
 ```
 
@@ -106,28 +106,28 @@ This layer tries to offer a very simple API to overcome the challenges written a
 ```go
 import (
 	"time"
-
-    "github.com/dadrus/oath"
-    "github.com/dadrus/oath/otp"
+	
+	"github.com/dadrus/oath"
+	"github.com/dadrus/oath/otp"
 )
 
 func main() {
 	// using  symmetric key instantiate an AEAD cipher
 	c := ...
 	
-	// create a TOTP blob.
-    blob, err := oath.TOTP.New(c,
-        oath.WithHashAlgorithm(otp.SHA256),
-        oath.WithDigits(6),
-        oath.WithTimeStep(20 * time.Second),
-        oath.WithSkew(1))
+	// create a TOTP blob. 
+	blob, err := oath.TOTP.New(c,
+		oath.WithHashAlgorithm(otp.SHA256), 
+		oath.WithDigits(6), 
+		oath.WithTimeStep(20 * time.Second), 
+		oath.WithSkew(1))
 	if err != nil {
-	    // Do something with the error	
-    }
+	    // Do something with the error 
+	}
 	
-	// The blob returned above is just a string, which is contains all the algorithms settings
-	// encrypted and authenticity protected by the AEAD cipher. So you can store it in the DB
-	// together with the remaining profile information of the user.
+	// The blob returned above is just a string, which is contains all the algorithms 
+	// settings encrypted and authenticity protected by the AEAD cipher. So you can 
+	// store it in the DB together with the remaining profile information of the user.
 	
 	// All configuration options above are optional. Even the key used for the actual OTP
 	// generation and verification. If not provided (as done above), it will be generated.
@@ -135,19 +135,20 @@ func main() {
 	// Verify an OTP received from the cleint
 	serialized, synced, err := oath.Verify(otpValue, blob, c)
 	
-	// serialized is an updated version of the blob (validity window, used OTPs, etc). As
-	// with the blob from above it is encrypted and authenticity protected by the AEAD cipher
+	// serialized is an updated version of the blob (validity window, used OTPs, etc). 
+	// As with the blob from above it is encrypted and authenticity protected by the AEAD
+	// cipher
 	
-	// synced will be set to true if there was at least one successful verification (also in the past
-	// for the given blob). This way you can better react on errors, e.g during registration, onoarding
-	// etc.
+	// synced will be set to true if there was at least one successful verification (also
+	// in the past for the given blob). This way you can better react on errors, e.g during
+	// registration, onoarding, etc.
 	
 	// Export the blob for usage with OTP Apps 
 	otpURI, encodedKey, err := oath.Export(serialized, c, "my account", "my fancy service")
 	
-	// This is pretty much the same as with the DIY layer. The difference is that you get also the key
-	// used for the OTP validation as base32 encoded string. So you can render it as text in addition to
-	// the QR code
+	// This is pretty much the same as with the DIY layer. The difference is that you get
+	// also the key used for the OTP validation as base32 encoded string. So you can render 
+	// it as text in addition to the QR code
 }
 ```
 
