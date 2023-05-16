@@ -119,8 +119,9 @@ func main() {
 	blob, err := oath.TOTP.New(c,
 		oath.WithHashAlgorithm(otp.SHA256), 
 		oath.WithDigits(6), 
-		oath.WithTimeStep(20 * time.Second), 
-		oath.WithSkew(1))
+		oath.WithTimeStep(20 * time.Second),
+        oath.WithInitialSkew(2), // initial size for the validity window
+		oath.WithWorkSkew(1)) // regular size for the validity window
 	if err != nil {
 	    // Do something with the error 
 	}
