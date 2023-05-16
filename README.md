@@ -61,7 +61,7 @@ func main()  {
 Even the example above is pretty simple, there are many topics, which should be addressed by the application using it:
 
 * how to protect the key used by the algorithm
-* how to deal with deviation, as well as the counter in case of HOTP
+* how to deal with time, as well as the counter deviation in case of TOTP, respectively HOTP
 * how to deal with synchronization between the client and the server
 * how to ensure OTPs are not reused
 * ...
