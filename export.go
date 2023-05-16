@@ -3,6 +3,7 @@ package oath
 import (
 	"crypto/cipher"
 	"encoding/base32"
+	"strings"
 )
 
 // Export exports the data from the blob in the OTPAUTH format (first return value),
@@ -13,5 +14,7 @@ func Export(blobValue string, c cipher.AEAD, account, issuer string) (string, st
 		return "", "", err
 	}
 
-	return blb.OTPURI(account, issuer), base32.StdEncoding.EncodeToString(data.Key), nil
+	encoded := base32.StdEncoding.EncodeToString(data.Key)
+
+	return blb.OTPURI(account, issuer), strings.TrimRight(encoded, "="), nil
 }
