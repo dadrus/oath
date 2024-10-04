@@ -1,11 +1,13 @@
 module github.com/dadrus/oath
 
-go 1.20
+go 1.22.0
+
+toolchain go1.23.2
 
 require (
 	github.com/stephennancekivell/go-future v0.0.0-20220519100038-8611b539078e
 	github.com/stretchr/testify v1.8.3
-	golang.org/x/exp v0.0.0-20230519143937-03e91628a987
+	golang.org/x/exp v0.0.0-20241004190924-225e2abe05e6
 )
 
 require (
